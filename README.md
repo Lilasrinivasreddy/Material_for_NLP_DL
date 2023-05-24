@@ -17,11 +17,12 @@ FROM Tapsium_AIML.dummy_results_data d
 JOIN Tapsium_AIML.new_results_data n ON d.result_id = n.result_id
 WHERE n.status IN ('success', 'failure')
 AND (d.result_id, d.date1) IN (
-  SELECT result_id, MAX(date1)
+  SELECT d2.result_id, MAX(d2.date1)
   FROM Tapsium_AIML.dummy_results_data d2
   JOIN Tapsium_AIML.new_results_data n2 ON d2.result_id = n2.result_id
   WHERE n2.status = n.status
-  GROUP BY result_id
+  GROUP BY d2.result_id
 )
 ORDER BY d.date1 DESC;
+
 
