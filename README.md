@@ -10,3 +10,16 @@ AND (t1.date, t2.status) IN (
     GROUP BY t2.status
 )
 ORDER BY t1.date DESC;
+
+
+SELECT d.result_id, d.id, d.date1, n.status
+FROM Tapsium_AIML.dummy_results_data d
+JOIN Tapsium_AIML.new_results_data n ON d.result_id = n.result_id
+WHERE n.status IN ('success', 'failure')
+AND d.date1 = (
+  SELECT MAX(date1)
+  FROM Tapsium_AIML.dummy_results_data d2
+  JOIN Tapsium_AIML.new_results_data n2 ON d2.result_id = n2.result_id
+  WHERE d2.result_id = d.result_id
+)
+ORDER BY d.date1 DESC;
